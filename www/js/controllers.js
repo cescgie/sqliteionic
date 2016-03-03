@@ -82,4 +82,16 @@ angular.module('starter.controllers', [])
         });
     }
 
+})
+
+.controller('ListsCtrl', function($scope, Lists) {
+  $scope.lists = Lists.all();
+  $scope.remove = function(list) {
+    Lists.remove(list);
+  };
+})
+
+.controller('ListsDetailCtrl', function($scope, $stateParams, Lists) {
+  $scope.lists = Lists.get($stateParams.listid);
+  console.log('ListsDetailCtrl');
 });
