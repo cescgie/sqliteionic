@@ -73,7 +73,6 @@ angular.module('starter.controllers', [])
                 console.log("No results found");
                 ionicToast.show('No data selected.', 'bottom', false, 2500);
             }
-            //$scope.persons= all();
             $scope.personall = all();
         }, function (err) {
             console.error(err);
@@ -92,18 +91,6 @@ angular.module('starter.controllers', [])
     $scope.closeModal = function() {
       $scope.modal.hide();
     };
-    //Cleanup the modal when we're done with it!
-    $scope.$on('$destroy', function() {
-      $scope.modal.remove();
-    });
-    // Execute action on hide modal
-    $scope.$on('modal.hidden', function() {
-      // Execute action
-    });
-    // Execute action on remove modal
-    $scope.$on('modal.removed', function() {
-      // Execute action
-    });
 
     $scope.createContact = function(u) {
       // $scope.contacts.push({ name: u.firstName + ' ' + u.lastName });
@@ -121,15 +108,11 @@ angular.module('starter.controllers', [])
 })
 
 .controller('ListsDetailCtrl', function($scope, $cordovaSQLite, $stateParams, $ionicModal, Lists, ionicToast) {
+
   $scope.lists = Lists.get($stateParams.listid);
 
   $scope.update = function(u) {
-      var query = "UPDATE people SET firstname = ? , lastname = ? WHERE id = ?";
-      $cordovaSQLite.execute(db, query, [u.firstname, u.lastname, u.id]).then(function(res) {
-          console.log("Update ID -> " + u.id);
-      }, function (err) {
-          console.error(err);
-      });
+      Lists.put(u);
       $scope.lists = Lists.get(u.id);
       $scope.modal.hide();
       ionicToast.show('Contact information updated.', 'bottom', false, 2500);

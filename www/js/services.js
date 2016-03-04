@@ -1,9 +1,9 @@
 angular.module('starter.services', [])
 
 .factory('Lists', function($cordovaSQLite) {
-  
+
   function getOne(id){
-    var query = "SELECT id, firstname, lastname FROM people WHERE id = ?";
+    var query = "SELECT * FROM people WHERE id = ?";
     var personall=[];
     $cordovaSQLite.execute(db, query,[id]).then(function(res) {
         if(res.rows.length > 0) {
@@ -25,22 +25,25 @@ angular.module('starter.services', [])
     return personall;
   }
 
+  function update(u){
+    var query = "UPDATE people SET firstname = ? , lastname = ? WHERE id = ?";
+    $cordovaSQLite.execute(db, query, [u.firstname, u.lastname, u.id]).then(function(res) {
+        console.log("Update ID -> " + u.id);
+    }, function (err) {
+        console.error(err);
+    });
+  }
+
   return {
     all: function() {
       return lists;
     },
-    // remove: function(list) {
-    //   lists.splice(lists.indexOf(list), 1);
-    // },
     get: function(listid) {
       console.log('listid :'+listid);
       return getOne(listid);
-      // for (var i = 0; i < lists.length; i++) {
-      //   if (lists[i].id === parseInt(listid)) {
-      //     return lists[i];
-      //   }
-      // }
-      //return null;
+    },
+    put: function(u){
+      return update(u);
     }
   };
 });
