@@ -1,8 +1,11 @@
 angular.module('starter.controllers', [])
 
-.controller("ExampleController", function($scope,$cordovaSQLite,$ionicModal) {
+.controller("ExampleController", function($scope,$cordovaSQLite,$ionicModal,ionicToast) {
 
-    $scope.infos = [{'info':'success'}];
+    $scope.refresh = function(){
+      $scope.personall = all();
+      console.log('refresh');
+    };
 
     $scope.insert = function(firstname, lastname) {
         var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
@@ -12,10 +15,7 @@ angular.module('starter.controllers', [])
             console.error(err);
         });
         $scope.personall = all();
-    }
-
-    //$scope.persons = [{'firstname':'tono','lastname':'ko'},{'firstname':'dani','lastname':'tu'}];
-    //$scope.personall = [{'firstname':'kura','lastname':'miao'},{'firstname':'bruno','lastname':'gukguk'}];
+    };
 
     $scope.select = function(lastname) {
         var query = "SELECT id, firstname, lastname FROM people WHERE lastname = ?";
@@ -37,7 +37,7 @@ angular.module('starter.controllers', [])
             console.error(err);
             $scope.persons = '';
         });
-    }
+    };
 
     function all(){
       var query = "SELECT id, firstname, lastname FROM people";
@@ -60,11 +60,7 @@ angular.module('starter.controllers', [])
           personall = '';
       });
       return personall;
-    }
-
-    // $scope.selectAll = function(){
-    //   $scope.personall = all();
-    // }
+    };
 
     $scope.delete = function(id) {
         var query = "DELETE FROM people WHERE id = ?";
@@ -72,15 +68,17 @@ angular.module('starter.controllers', [])
         $cordovaSQLite.execute(db, query, [id]).then(function(res) {
             if(res.rowsAffected > 0) {
                 console.log('delete success');
+                ionicToast.show('Contact deleted.', 'bottom', false, 2500);
             } else {
                 console.log("No results found");
+                ionicToast.show('No data selected.', 'bottom', false, 2500);
             }
             //$scope.persons= all();
             $scope.personall = all();
         }, function (err) {
             console.error(err);
         });
-    }
+    };
 
     $ionicModal.fromTemplateUrl('templates/modal.html', {
       scope: $scope,
@@ -117,18 +115,40 @@ angular.module('starter.controllers', [])
       });
       $scope.personall = all();
       $scope.modal.hide();
+      ionicToast.show('New contact inserted.', 'bottom', false, 2500);
     };
 
 })
 
-.controller('ListsCtrl', function($scope, Lists) {
-  $scope.lists = Lists.all();
-  $scope.remove = function(list) {
-    Lists.remove(list);
-  };
-})
-
-.controller('ListsDetailCtrl', function($scope, $stateParams, Lists) {
+.controller('ListsDetailCtrl', function($scope, $cordovaSQLite, $stateParams, $ionicModal, Lists, ionicToast) {
   $scope.lists = Lists.get($stateParams.listid);
-  console.log('ListsDetailCtrl');
+
+  $scope.update = function(u) {
+      var query = "UPDATE people SET firstname = ? , lastname = ? WHERE id = ?";
+      $cordovaSQLite.execute(db, query, [u.firstname, u.lastname, u.id]).then(function(res) {
+          console.log("Update ID -> " + u.id);
+      }, function (err) {
+          console.error(err);
+      });
+      $scope.lists = Lists.get(u.id);
+      $scope.modal.hide();
+      ionicToast.show('Contact information updated.', 'bottom', false, 2500);
+  };
+
+  $ionicModal.fromTemplateUrl('templates/editmodal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function(id) {
+    $scope.lists = Lists.get(id);
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
 });

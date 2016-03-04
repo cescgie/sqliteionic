@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 var db = null;
 
-var example = angular.module('starter', ['ionic','ngCordova','starter.controllers','starter.services','starter.config']);
+var example = angular.module('starter', ['ionic','ngCordova','starter.controllers','starter.services','starter.config','ionic-toast']);
 
 example.run(function($ionicPlatform,$cordovaSQLite) {
   $ionicPlatform.ready(function() {
