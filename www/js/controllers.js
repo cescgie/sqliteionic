@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller("ExampleController", function($scope,$cordovaSQLite) {
+.controller("ExampleController", function($scope,$cordovaSQLite,$ionicModal) {
 
     $scope.infos = [{'info':'success'}];
 
@@ -62,9 +62,9 @@ angular.module('starter.controllers', [])
       return personall;
     }
 
-    $scope.selectAll = function(){
-      $scope.personall = all();
-    }
+    // $scope.selectAll = function(){
+    //   $scope.personall = all();
+    // }
 
     $scope.delete = function(id) {
         var query = "DELETE FROM people WHERE id = ?";
@@ -81,6 +81,43 @@ angular.module('starter.controllers', [])
             console.error(err);
         });
     }
+
+    $ionicModal.fromTemplateUrl('templates/modal.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+      // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+      // Execute action
+    });
+
+    $scope.createContact = function(u) {
+      // $scope.contacts.push({ name: u.firstName + ' ' + u.lastName });
+      var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
+      $cordovaSQLite.execute(db, query, [u.firstName, u.lastName]).then(function(res) {
+          console.log("INSERT ID -> " + res.insertId);
+      }, function (err) {
+          console.error(err);
+      });
+      $scope.personall = all();
+      $scope.modal.hide();
+    };
 
 })
 

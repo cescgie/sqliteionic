@@ -1,27 +1,17 @@
 <ion-view view-title="Dashboard">
   <ion-content class="padding">
       <p>{{infos.info}}</p>
-      <button class="button" ng-click="insert('Brian', 'Mendes')">Insert</button>
-      <button class="button" ng-click="select('Mendes')">Select</button>
+      <button class="button button-icon ion-compose" ng-click="openModal()">Create</button>
       <button class="button" ng-click="selectAll()">Select All</button>
-
-      <!-- <ion-toggle ng-model="shouldShowDelete">
-        Show Delete?
-      </ion-toggle>
-      <ion-list show-delete="shouldShowDelete" ng-repeat="yoho in persons">
-        <ion-item>
-          <ion-delete-button class="ion-minus-circled" ng-click="delete(yoho.id)"></ion-delete-button>
-            {{yoho.firstname}} {{yoh.lastname}}
-        </ion-item>
-      </ion-list> -->
 
       <ion-toggle ng-model="shouldShowDelete">
         Show Delete?
       </ion-toggle>
       <ion-list show-delete="shouldShowDelete" ng-repeat="yoh in personall">
-        <ion-item>
+        <ion-item type="item-text-wrap" href="#/tab/lists/{{yoh.id}}">
           <ion-delete-button class="ion-minus-circled" ng-click="delete(yoh.id)"></ion-delete-button>
             {{yoh.firstname}} {{yoh.lastname}}
+          <i class="icon ion-chevron-right icon-accessory"></i>
         </ion-item>
       </ion-list>
   </ion-content>

@@ -53,9 +53,9 @@ angular.module('starter.services', [])
     all: function() {
       return lists;
     },
-    remove: function(list) {
-      lists.splice(lists.indexOf(list), 1);
-    },
+    // remove: function(list) {
+    //   lists.splice(lists.indexOf(list), 1);
+    // },
     get: function(listid) {
       console.log('listid :'+listid);
       var lists = getOne(listid);
