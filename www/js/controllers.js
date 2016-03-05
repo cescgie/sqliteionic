@@ -1,6 +1,6 @@
 angular.module('app.controllers', [])
 
-.controller("Controller", function($scope,$cordovaSQLite,$ionicModal,ionicToast,Lists) {
+.controller("HomeCtrl", function($scope,$cordovaSQLite,$ionicModal,ionicToast,Lists,$ionicHistory) {
 
     $scope.refresh = function(){
       $scope.personall = Lists.get();
@@ -35,7 +35,7 @@ angular.module('app.controllers', [])
 
 })
 
-.controller('ListsDetailCtrl', function($scope, $cordovaSQLite, $stateParams, $ionicModal, Lists, ionicToast) {
+.controller('ListsDetailCtrl', function($scope, $cordovaSQLite, $stateParams, $ionicModal, Lists, ionicToast,$ionicHistory) {
     $scope.lists = Lists.get($stateParams.listid);
 
     $scope.update = function(data) {

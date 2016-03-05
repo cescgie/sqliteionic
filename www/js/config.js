@@ -17,12 +17,12 @@ angular.module('app.config', [])
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.home', {
+    url: '/home',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
-        controller: 'Controller'
+      'tab-home': {
+        templateUrl: 'templates/tab-home.html',
+        controller: 'HomeCtrl'
       }
     }
   })
@@ -40,14 +40,23 @@ angular.module('app.config', [])
     .state('tab.list-detail', {
       url: '/lists/:listid',
       views: {
-        'tab-dash': {
+        'tab-home': {
           templateUrl: 'templates/list-detail.html',
           controller: 'ListsDetailCtrl'
+        }
+      }
+    })
+
+    .state('tab.about', {
+      url: "/about",
+      views: {
+        'tab-about': {
+          templateUrl: "templates/tab-about.html"
         }
       }
     });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/home');
 
 });
