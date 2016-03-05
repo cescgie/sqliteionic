@@ -1,82 +1,23 @@
-angular.module('starter.controllers', [])
+angular.module('app.controllers', [])
 
-.controller("ExampleController", function($scope,$cordovaSQLite,$ionicModal,ionicToast) {
+.controller("Controller", function($scope,$cordovaSQLite,$ionicModal,ionicToast,Lists) {
 
     $scope.refresh = function(){
-      $scope.personall = all();
+      $scope.personall = Lists.get();
       console.log('refresh');
     };
 
-    $scope.insert = function(firstname, lastname) {
-        var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
-        $cordovaSQLite.execute(db, query, [firstname, lastname]).then(function(res) {
-            console.log("INSERT ID -> " + res.insertId);
-        }, function (err) {
-            console.error(err);
-        });
-        $scope.personall = all();
-    };
-
-    $scope.select = function(lastname) {
-        var query = "SELECT id, firstname, lastname FROM people WHERE lastname = ?";
-        $scope.persons = [];
-        $cordovaSQLite.execute(db, query, [lastname]).then(function(res) {
-            if(res.rows.length > 0) {
-                for(var i=0; i<res.rows.length; i++){
-                    $scope.persons.push({
-                           id:res.rows.item(i).id,
-                           firstname:res.rows.item(i).firstname,
-                           lastname:res.rows.item(i).lastname
-                   });
-                }
-            } else {
-                console.log("No results found");
-                $scope.persons = '';
-            }
-        }, function (err) {
-            console.error(err);
-            $scope.persons = '';
-        });
-    };
-
-    function all(){
-      var query = "SELECT id, firstname, lastname FROM people";
-      var personall=[];
-      $cordovaSQLite.execute(db, query).then(function(res) {
-          if(res.rows.length > 0) {
-              for(var i=0; i<res.rows.length; i++){
-                  personall.push({
-                         id:res.rows.item(i).id,
-                         firstname:res.rows.item(i).firstname,
-                         lastname:res.rows.item(i).lastname
-                  });
-              }
-          } else {
-              console.log("No results found");
-              personall = '';
-          }
-      }, function (err) {
-          console.error(err);
-          personall = '';
-      });
-      return personall;
-    };
-
     $scope.delete = function(id) {
-        var query = "DELETE FROM people WHERE id = ?";
-        $scope.persons = [];
-        $cordovaSQLite.execute(db, query, [id]).then(function(res) {
-            if(res.rowsAffected > 0) {
-                console.log('delete success');
-                ionicToast.show('Contact deleted.', 'bottom', false, 2500);
-            } else {
-                console.log("No results found");
-                ionicToast.show('No data selected.', 'bottom', false, 2500);
-            }
-            $scope.personall = all();
-        }, function (err) {
-            console.error(err);
-        });
+        Lists.delete(id);
+        ionicToast.show('Contact deleted.', 'bottom', false, 2500);
+        $scope.personall = Lists.get();
+    };
+
+    $scope.create = function(data) {
+      Lists.post(data);
+      $scope.personall = Lists.get();
+      $scope.modal.hide();
+      ionicToast.show('New contact inserted.', 'bottom', false, 2500);
     };
 
     $ionicModal.fromTemplateUrl('templates/modal.html', {
@@ -92,46 +33,32 @@ angular.module('starter.controllers', [])
       $scope.modal.hide();
     };
 
-    $scope.createContact = function(u) {
-      // $scope.contacts.push({ name: u.firstName + ' ' + u.lastName });
-      var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
-      $cordovaSQLite.execute(db, query, [u.firstName, u.lastName]).then(function(res) {
-          console.log("INSERT ID -> " + res.insertId);
-      }, function (err) {
-          console.error(err);
-      });
-      $scope.personall = all();
-      $scope.modal.hide();
-      ionicToast.show('New contact inserted.', 'bottom', false, 2500);
-    };
-
 })
 
 .controller('ListsDetailCtrl', function($scope, $cordovaSQLite, $stateParams, $ionicModal, Lists, ionicToast) {
+    $scope.lists = Lists.get($stateParams.listid);
 
-  $scope.lists = Lists.get($stateParams.listid);
+    $scope.update = function(data) {
+        Lists.put(data);
+        $scope.lists = Lists.get(data.id);
+        $scope.modal.hide();
+        ionicToast.show('Contact information updated.', 'bottom', false, 2500);
+    };
 
-  $scope.update = function(u) {
-      Lists.put(u);
-      $scope.lists = Lists.get(u.id);
+    $ionicModal.fromTemplateUrl('templates/editmodal.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+    $scope.openModal = function(id) {
+      $scope.lists = Lists.get(id);
+      $scope.modal.show();
+    };
+
+    $scope.closeModal = function() {
       $scope.modal.hide();
-      ionicToast.show('Contact information updated.', 'bottom', false, 2500);
-  };
-
-  $ionicModal.fromTemplateUrl('templates/editmodal.html', {
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
-
-  $scope.openModal = function(id) {
-    $scope.lists = Lists.get(id);
-    $scope.modal.show();
-  };
-
-  $scope.closeModal = function() {
-    $scope.modal.hide();
-  };
+    };
 
 });

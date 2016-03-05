@@ -1,4 +1,4 @@
-angular.module('starter.config', [])
+angular.module('app.config', [])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -22,7 +22,7 @@ angular.module('starter.config', [])
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',
-        controller: 'ExampleController'
+        controller: 'Controller'
       }
     }
   })
