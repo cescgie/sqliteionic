@@ -20,7 +20,7 @@ angular.module('app.controllers', [])
       ionicToast.show('New contact inserted.', 'bottom', false, 2500);
     };
 
-    $ionicModal.fromTemplateUrl('templates/modal.html', {
+    $ionicModal.fromTemplateUrl('templates/create-modal.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {
@@ -45,7 +45,7 @@ angular.module('app.controllers', [])
         ionicToast.show('Contact information updated.', 'bottom', false, 2500);
     };
 
-    $ionicModal.fromTemplateUrl('templates/editmodal.html', {
+    $ionicModal.fromTemplateUrl('templates/edit-modal.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function(modal) {

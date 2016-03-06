@@ -34,7 +34,8 @@ angular.module('app.services', [])
                 personall.push({
                        id:res.rows.item(i).id,
                        firstname:res.rows.item(i).firstname,
-                       lastname:res.rows.item(i).lastname
+                       lastname:res.rows.item(i).lastname,
+                       fullname:res.rows.item(i).firstname+' '+res.rows.item(i).lastname
                 });
             }
         } else {

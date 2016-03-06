@@ -2,7 +2,8 @@
   <ion-content class="padding">
     <ion-list>
       <ion-item ng-repeat="list in lists" >
-         First Name : {{list.firstname}} <br>
+         Full Name : {{list.fullname}}<br>
+         First Name : {{list.firstname}}<br>
          Last Name : {{list.lastname}}<br>
          <button class="button" ng-click="openModal(list.id)">Edit</button>
       </ion-item>
